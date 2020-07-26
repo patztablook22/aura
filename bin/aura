@@ -8,7 +8,7 @@ require_relative '../lib/aura'
 Signal.trap('INT') { puts; exit 1 }
 
 unless ARGV.size == 1
-  $stderr.puts "package?"
+  puts "provide package as an argument"
   exit 1
 end
 
@@ -20,11 +20,15 @@ env.redo =  false
 env.todo =  ARGV[0]
 env.init
 
+Console.log("requesting")
+
 if env.redo or !File.directory?(env.aurs + env.todo)
 
   FileUtils.rm_rf(env.aurs + env.todo) rescue false
 
   package = "https://aur.archlinux.org/#{env.todo}.git"
+  Console.log("requesting", package)
+
   gitfile = env.aurs + env.todo
   command = String.new
 
@@ -32,25 +36,26 @@ if env.redo or !File.directory?(env.aurs + env.todo)
   command << package << " "
   command << gitfile
 
-  Console << [:aur, package]
-
   pipe = Pipe.new
   pipe.command = command
   pipe.go!
 
   if pipe.out.start_with? "warning"
     FileUtils.rm_rf gitfile
-    $stderr.puts "package?!"
+    Console.err("couldn't find AUR package")
     exit 1
   end
 
 end
 
 Dir.chdir(env.aurs + env.todo)
+
+Console.log("requesting", "PKGBUILD")
 pkgbuild = Pkgbuild.new
+Console.end
 
 unless pkgbuild.ok?
-  $stderr.puts "pkgbuild?"
+  Console.err("unreadable PKGBUILD")
   exit 1
 end
 
@@ -60,18 +65,33 @@ if env.redo
   FileUtils.rm_rf(srcdir)
 end
 
-unless File.exists? srcdir
+Console.log("retrieving")
 
+if File.exists? srcdir
+  sources = []
+else
   Dir.mkdir(srcdir)
-
-  pkgbuild["source"].each do |path|
-    Source.new(path, srcdir) rescue
-    begin
-      $stderr.puts "source?!"
-    end
+  sources = pkgbuild["source"].map do |path|
+    Source.new(path, srcdir)
   end
-
 end
+
+sources.each do |src|
+  src.retrieve rescue
+  begin
+    Console.err("failed to open stream")
+    exit 1
+  end
+end
+
+Console.end
+Console.log("extracting")
+
+sources.each do |src|
+  src.extract
+end
+
+Console.end
 
 pkgbuild << {"srcdir" => srcdir}
 pkgbuild << {"pkgdir" => env.root}
@@ -81,8 +101,19 @@ pkgbuild << {"pkgdir" => env.root}
   body = pkgbuild[func + "()"]
   next if body.nil?
 
+  Console.log("installing", func)
+
   pipe = Pipe.new
   pipe.command = body
   pipe.go!
 
+  unless pipe.ok?
+    Console.err("compatibility?!")
+    5.times { puts }
+    puts pipe.out
+    exit 1 
+  end
+
 end
+
+puts "done!"

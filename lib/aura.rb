@@ -1,3 +1,4 @@
+require_relative 'aura/colors'
 require_relative 'aura/console'
 require_relative 'aura/pipe'
 require_relative 'aura/environment'
