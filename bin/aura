@@ -4,12 +4,38 @@ require 'open-uri'
 require 'fileutils'
 require_relative '../lib/aura'
 
-env = Environment.new
-env.test  = "test/test"
-env.temp  = "temp"
-env.clean =  true
+unless ARGV.size == 1
+  $stderr.puts "package?"
+  exit 1
+end
 
-pkgbuild = Pkgbuild.new(File.expand_path("PKGBUILD", env.test))
+env = Environment.new
+env.test  = "test"
+env.temp  = "temp"
+env.redo  =  true
+env.todo  = ARGV[0]
+
+if env.redo or !env.cd?
+
+  FileUtils.rm_rf env.test+env.todo rescue false
+
+  package  = "https://aur.archlinux.org/#{env.todo}.git"
+
+  command  = "git clone --quiet "
+  command += package + " "
+  command += env.test + env.todo
+
+  Console << [:aur, package]
+  system command 
+
+  unless env.cd?
+    $stderr.puts "package?!"
+    exit 1
+  end
+
+end
+
+pkgbuild = Pkgbuild.new
 
 unless pkgbuild.ok?
   $stderr.puts "pkgbuild?"
@@ -18,15 +44,15 @@ end
 
 srcdir = File.expand_path(pkgbuild["pkgname"], env.temp)
 
-if env.clean
+if env.redo
   FileUtils.rm_rf(srcdir)
 end
 
 unless File.exists? srcdir
 
   Dir.mkdir(srcdir)
-  Dir.chdir(env.test)
 
+  p pkgbuild["source"]
   pkgbuild["source"].each do |path|
     Request.new(path, srcdir) rescue
     begin

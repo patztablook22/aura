@@ -9,11 +9,15 @@ module Console
 
   private
 
-  def self.progress(type, content)
+  def self.progress(type, content = "")
 
-    content = File.basename(content).to_s
+    unless content.start_with? /http(s)?:\/\//
+      content = File.basename(content).to_s
+    end
 
     case type
+    when :aur
+      return "Retrieving [#{content}]"
     when :req
       return "Requesting [#{content}]"
     when :tar

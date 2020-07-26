@@ -2,7 +2,7 @@ class Pkgbuild
 
   @data
 
-  def initialize path
+  def initialize path = "PKGBUILD"
     parser = Parser.new path
     @data = parser.data
   end
