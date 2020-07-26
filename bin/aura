@@ -1,0 +1,42 @@
+#! /usr/bin/ruby
+
+require 'open-uri'
+require 'fileutils'
+require_relative '../lib/aura'
+
+CLEAN = false
+
+env = Environment.new
+env.test = "test/test"
+env.temp = "temp"
+
+END {
+
+  if CLEAN
+    Dir[env.temp + "/*"].each do |file|
+      FileUtils.rm_rf(file)
+    end
+  end
+
+}
+
+pkgbuild = Pkgbuild.new(File.expand_path("PKGBUILD", env.test))
+
+unless pkgbuild.ok?
+  puts "pkgbuild?"
+  exit 1
+end
+
+source = pkgbuild.get("source")
+target = File.expand_path(File.basename(source), env.temp)
+srcdir = File.basename(source, ".*")
+
+unless File.exists? target
+  puts "downloading #{source}"
+  File.open(target, "w") do |file|
+    file << URI.open(source).read
+  end
+
+  puts "extracting #{target}"
+  `tar -zxvf #{target} -C #{env.temp}`
+end
