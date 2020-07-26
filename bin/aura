@@ -12,6 +12,8 @@ unless ARGV.size == 1
   exit 1
 end
 
+Console.log("processing")
+
 env = Environment.new
 env.aurs = "test/aurs"
 env.pkgs = "test/pkgs"
@@ -19,8 +21,6 @@ env.root = "test/root"
 env.redo =  false
 env.todo =  ARGV[0]
 env.init
-
-Console.log("requesting")
 
 if env.redo or !File.directory?(env.aurs + env.todo)
 
@@ -52,26 +52,36 @@ Dir.chdir(env.aurs + env.todo)
 
 Console.log("requesting", "PKGBUILD")
 pkgbuild = Pkgbuild.new
-Console.end
 
 unless pkgbuild.ok?
-  Console.err("unreadable PKGBUILD")
+  Console.err("unparseable PKGBUILD")
   exit 1
 end
 
+Console.log("completing", "PKGBUILD")
+
 srcdir = File.expand_path(pkgbuild["pkgname"], env.pkgs)
+pkgbuild << {"srcdir" => srcdir}
+pkgbuild << {"pkgdir" => env.root}
+
+unless pkgbuild.really?
+  Console.err("incomplete PKGBUILD")
+end
+
+Console.end
+
 
 if env.redo
   FileUtils.rm_rf(srcdir)
 end
 
-Console.log("retrieving")
-
 if File.exists? srcdir
   sources = []
 else
   Dir.mkdir(srcdir)
-  sources = pkgbuild["source"].map do |path|
+  sources = pkgbuild["source"]
+  sources = [sources] unless sources.class == Array
+  sources.map! do |path|
     Source.new(path, srcdir)
   end
 end
@@ -85,7 +95,6 @@ sources.each do |src|
 end
 
 Console.end
-Console.log("extracting")
 
 sources.each do |src|
   src.extract
@@ -93,8 +102,6 @@ end
 
 Console.end
 
-pkgbuild << {"srcdir" => srcdir}
-pkgbuild << {"pkgdir" => env.root}
 
 ["prepare", "build", "package"].each do |func|
 
@@ -108,12 +115,18 @@ pkgbuild << {"pkgdir" => env.root}
   pipe.go!
 
   unless pipe.ok?
-    Console.err("compatibility?!")
-    5.times { puts }
+    Console.err("compatibility?")
+    puts "see for yourself!"
+    Console.hr
     puts pipe.out
+    Console.hr
+
     exit 1 
   end
 
 end
 
-puts "done!"
+Console.end
+Console.log("successful")
+Console.end
+

@@ -35,6 +35,7 @@ module Console
   end
 
   def self.end ok = true
+    return if @@size == 0
     @@size = 0
     puts
   end
@@ -47,6 +48,11 @@ module Console
     $stderr.puts args
     $stderr.puts
 
+  end
+
+  def self.hr
+    self.end
+    puts "─" * width
   end
 
   private

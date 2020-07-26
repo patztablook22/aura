@@ -11,6 +11,13 @@ class Pkgbuild
     !@data.nil?
   end
 
+  def really?
+    return false unless ok?
+    return @data.keys.all? do |key|
+      self[key]
+    end
+  end
+
   def << hash
     hash.each_pair do |key, val|
       unless val.class == Array
