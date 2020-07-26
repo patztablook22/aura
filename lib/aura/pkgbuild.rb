@@ -12,10 +12,25 @@ class Pkgbuild
   end
 
   def really?
+    
     return false unless ok?
-    return @data.keys.all? do |key|
-      self[key]
+
+    missing = []
+
+    @data.each_key do |key|
+      begin
+        self[key]
+      rescue => e
+        missing.push "missing constant: #{e.message}"
+      end
     end
+
+    missing.each do |it|
+      Console << it
+    end
+
+    missing.none?
+
   end
 
   def << hash
@@ -69,10 +84,7 @@ class Pkgbuild
           case c
           when "}"
             tmp  = self[ins, false].to_a[0]
-            unless tmp
-              puts "#{ins} not defined"
-              exit 255
-            end
+            raise ins unless tmp
             buf << tmp
             ins = nil
           when "{";
@@ -82,10 +94,7 @@ class Pkgbuild
         else
           if [" ", "/", "\\", "\"", "'"].include? c
             tmp = self[ins, false].to_a[0]
-            unless tmp
-              puts "#{ins} not defined"
-              exit 255
-            end
+            raise ins unless tmp
             buf << tmp << c
             ins = nil
           else

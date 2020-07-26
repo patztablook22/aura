@@ -1,5 +1,6 @@
 #! /usr/bin/ruby
 
+require 'open3'
 require 'net/http'
 require 'open-uri'
 require 'fileutils'
@@ -40,7 +41,7 @@ if env.redo or !File.directory?(env.aurs + env.todo)
   pipe.command = command
   pipe.go!
 
-  if pipe.out.start_with? "warning"
+  if pipe.err.start_with? "warning"
     FileUtils.rm_rf gitfile
     Console.err("couldn't find AUR package")
     exit 1
@@ -66,10 +67,10 @@ pkgbuild << {"pkgdir" => env.root}
 
 unless pkgbuild.really?
   Console.err("incomplete PKGBUILD")
+  exit 1
 end
 
 Console.end
-
 
 if env.redo
   FileUtils.rm_rf(srcdir)
@@ -102,7 +103,6 @@ end
 
 Console.end
 
-
 ["prepare", "build", "package"].each do |func|
 
   body = pkgbuild[func + "()"]
@@ -115,12 +115,8 @@ Console.end
   pipe.go!
 
   unless pipe.ok?
+    Console << pipe.err
     Console.err("compatibility?")
-    puts "see for yourself!"
-    Console.hr
-    puts pipe.out
-    Console.hr
-
     exit 1 
   end
 
@@ -128,5 +124,5 @@ end
 
 Console.end
 Console.log("successful")
-Console.end
+Console.end(:oki)
 
