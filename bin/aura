@@ -13,10 +13,12 @@ unless ARGV.size == 1
 end
 
 env = Environment.new
-env.test  = "test"
-env.temp  = "temp"
-env.redo  =  false
-env.todo  =  ARGV[0]
+env.aurs = "test/aurs"
+env.pkgs = "test/pkgs"
+env.root = "test/root"
+env.redo =  false
+env.todo =  ARGV[0]
+env.init
 
 if env.redo or !env.cd?
 
@@ -27,7 +29,7 @@ if env.redo or !env.cd?
 
   command << "git clone --quiet "
   command << package + " "
-  command << env.test + env.todo
+  command << env.aurs + env.todo
 
   Console << [:aur, package]
 

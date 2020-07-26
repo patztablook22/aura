@@ -1,29 +1,43 @@
 class Environment
 
-  attr_reader :test, :temp, :todo, :redo
+  attr_reader :aurs, :pkgs, :root, :todo, :redo
 
-  @test
-  @temp
+  @aurs
+  @pkgs
+  @root
   @todo
   @redo
 
   def cd?
-    if File.directory? test+todo
-      Dir.chdir test+todo
+    if File.directory? aurs+todo
+      Dir.chdir aurs+todo
       true
     else
       false
     end
   end
 
-  def test= path
-    @test  = File.expand_path path
-    @test += "/" unless @test[-1] == "/"
+  def init
+    [aurs, pkgs, root].each do |path|
+      
+      FileUtils.mkdir_p(path) unless File.directory? path
+
+    end
   end
 
-  def temp= path
-    @temp  = File.expand_path path
-    @temp += "/" unless @temp[-1] == "/"
+  def aurs= path
+    @aurs  = File.expand_path path
+    @aurs += "/" unless @aurs[-1] == "/"
+  end
+
+  def pkgs= path
+    @pkgs  = File.expand_path path
+    @pkgs += "/" unless @pkgs[-1] == "/"
+  end
+
+  def root= path
+    @root  = File.expand_path path
+    @root += "/" unless @root[-1] == "/"
   end
 
   def todo= name
