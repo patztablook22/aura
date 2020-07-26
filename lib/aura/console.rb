@@ -2,6 +2,7 @@ module Console
 
   include Colors
 
+  @@heap = []
   @@size = 0
   @@data = {
     :message => "",
@@ -25,7 +26,6 @@ module Console
       end
     end
 
-
     @@data[:message] = message
     @@data[:content] = content
     @@data[:symbols] = symbols
@@ -34,39 +34,82 @@ module Console
 
   end
 
-  def self.end ok = true
+  def self.end symbol = nil
+
     return if @@size == 0
+
+    if symbol.class == Symbol
+      @@data[:symbols].push(symbol)
+    end
+
+    render
     @@size = 0
     puts
+
   end
 
   def self.err *args
 
-    self.end false
+    self.end :err
 
     $stderr.puts
     $stderr.puts args
     $stderr.puts
 
+    if @@heap.none?
+      return
+    end
+
+    $stderr.puts hr(true)
+
+    @@heap.each do |report|
+      $stderr.puts report
+    end
+
+    $stderr.puts hr(true)
+
   end
 
-  def self.hr
+  def self.hr suppress = false
     self.end
-    puts "─" * width
+    buf = "─" * width
+    puts buf unless suppress
+    buf
+  end
+
+  def self.<< report
+    @@heap << report
   end
 
   private
 
   def self.render
-    w = width
 
-    buf = String.new
-    buf << @@data[:message].upcase
+    w    = width
+    len  = 0
+    buf  = String.new
+
+    default = true
+    tmp = {
+      :err => COLOR_RED,
+      :oki => COLOR_GREEN,
+    }
+
+    tmp.each_pair do |sym, col|
+      if @@data[:symbols].include? sym
+        buf += col
+        default = false
+      end
+    end
+
+    buf += @@data[:message].upcase
+    buf += COLOR_DEFAULT unless default
+    len += @@data[:message].length
 
     content = @@data[:content]
 
-    main = content.shift
-    meta = content.shift
+    main = content[0]
+    meta = content[1]
 
     unless main.nil?
       buf << " [" << resize(w - buf.size - 5, main) << "]"
@@ -77,6 +120,7 @@ module Console
     erase
     @@size = buf.length
     print buf
+
   end
 
   def self.erase
