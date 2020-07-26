@@ -14,13 +14,14 @@ class Pkgbuild
   def get target, index = 0
 
     tmp = @data[target]
-    if tmp.class == Array
-      tmp = tmp[index]&.split('')
-    end
+    tmp = tmp[index] if tmp.class == Array
+    tmp = tmp&.split(//)
+
+    return nil unless tmp
+
     buf = ""
     ins = nil
 
-    return nil unless tmp
 
     tmp.each_with_index do |c, i|
       if ins

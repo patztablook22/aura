@@ -75,14 +75,12 @@ class Parser
             @buff[1] += ch
           end
         else
-
           if ch == @term
             @data[@buff[0]] = @buff[1]
             @buff = [""]
           else
             @buff[1] += ch
           end
-
         end 
 
       else # function
@@ -113,10 +111,22 @@ class Parser
 
     buff = Hash.new
     @data.each_pair do |key, val|
-      unless key.end_with? "()"
-        val = val.split("\n")
+
+      if key.end_with? "()"
+      else
+        tmp = val.split(/["'\n]/)
+        val = []
+        tmp.each do |it|
+          it.strip!
+          unless it.empty?
+            val += [it]
+          end
+        end
       end
+
+      puts "#{key} => #{val}"
       buff[key] = val
+
     end
 
     @data = buff
