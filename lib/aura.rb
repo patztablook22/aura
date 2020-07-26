@@ -1,3 +1,4 @@
+require_relative 'aura/console'
 require_relative 'aura/environment'
 require_relative 'aura/parser'
 require_relative 'aura/pkgbuild' 

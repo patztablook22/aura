@@ -9,9 +9,6 @@ env.test  = "test/test"
 env.temp  = "temp"
 env.clean =  true
 
-END {
-}
-
 pkgbuild = Pkgbuild.new(File.expand_path("PKGBUILD", env.test))
 
 unless pkgbuild.ok?
@@ -40,24 +37,6 @@ unless File.exists? srcdir
 
 end
 
-exit
-
-source = pkgbuild["source"]
-target = File.expand_path(File.basename(source), env.temp)
-
-unless File.exists? target
-  puts "downloading #{source}"
-  File.open(target, "w") do |file|
-    file << URI.open(source).read
-  end
-
-  puts "extracting #{target}"
-  `tar -zxvf #{target} -C #{env.temp}`
-end
-
-pkgbuild << {"srcdir" => env.temp}
-
-puts pkgbuild["srcdir"]
-exit
-build = pkgbuild.get("build()")
+pkgbuild << {"srcdir" => srcdir}
+build = pkgbuild["build()"]
 system(build)

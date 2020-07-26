@@ -12,7 +12,12 @@ class Pkgbuild
   end
 
   def << hash
-    @data.merge! hash
+    hash.each_pair do |key, val|
+      unless val.class == Array
+        val = [val]
+      end
+      @data[key] = val
+    end
   end
 
   def [](target, auto = true)

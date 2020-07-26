@@ -110,6 +110,7 @@ class Parser
     @data.each_pair do |key, val|
 
       if key.end_with? "()"
+        val = [val]
       else
         tmp = val.split(/["'\n]/)
         val = []

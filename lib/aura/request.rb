@@ -24,7 +24,7 @@ class Request
 
   def request type
 
-    puts "Requesting [#{log}]"
+    Console << [:req, @target]
 
     fileI = type.open(@source)
     File.open(@target, 'w') do |fileO|
@@ -53,7 +53,7 @@ class Request
 
     if extensions.include? "tar"
 
-      puts "Extracting [#{log}]"
+      Console << [:tar, @target]
 
       command  = "tar -"
       command += "z" if extensions.index { |it| it =~ /.z/ }
