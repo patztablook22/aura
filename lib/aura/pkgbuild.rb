@@ -39,32 +39,64 @@ class Pkgbuild
 
   end
 
+  def iterate &block
+    @data.each_pair do |key, val|
+      yield(key, val)
+    end
+  end
+
   private
 
   def complete str
 
-    tmp = str.split(//)
-
+    chars = str.split(//)
     buf = ""
     ins = nil
+    strict = false
 
-    tmp.each_with_index do |c, i|
+    chars.each_with_index do |c, i|
+
       if ins
-        case c
-        when "}"
-          buf += self[ins, false].to_a[0]
-          ins = nil
-        when "{";
+
+        if strict
+          case c
+          when "}"
+            tmp  = self[ins, false].to_a[0]
+            unless tmp
+              puts "#{ins} not defined"
+              exit 255
+            end
+            buf << tmp
+            ins = nil
+          when "{";
+          else
+            ins << c
+          end
         else
-          ins += c
+          if [" ", "/", "\\", "\"", "'"].include? c
+            tmp = self[ins, false].to_a[0]
+            unless tmp
+              puts "#{ins} not defined"
+              exit 255
+            end
+            buf << tmp << c
+            ins = nil
+          else
+            ins << c
+          end
         end
+
       else
-        if c == "$" and tmp[i + 1] == "{"
+
+        if c == "$"
           ins = ""
+          strict = chars[i + 1] == "{"
         else
-          buf += c
+          buf << c
         end
+
       end
+
     end
 
     buf

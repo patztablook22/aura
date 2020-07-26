@@ -9,22 +9,35 @@ module Console
 
   private
 
-  def self.progress(type, content = "")
+  def self.progress(type, content = "", meta = nil)
 
-    unless content.start_with? /http(s)?:\/\//
+    if !content.start_with? /http(s)?:\/\//
       content = File.basename(content).to_s
+    elsif content.length > 45
+      content = content[0..20] + "..." + content[-20..-1]
     end
+
+    buf = ""
 
     case type
     when :aur
-      return "Retrieving [#{content}]"
+      
+      buf << "Retrieving [#{content}]"
+
     when :req
-      return "Requesting [#{content}]"
+
+      buf << "Requesting [#{content}]"
+      buf << " (#{meta}B)" if meta
+
     when :tar
-      return "Extracting [#{content}]"
+
+      buf << "Extracting [#{content}]"
+
     else
       return nil
     end
+
+    buf
 
   end
 

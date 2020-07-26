@@ -1,8 +1,11 @@
 #! /usr/bin/ruby
 
+require 'net/http'
 require 'open-uri'
 require 'fileutils'
 require_relative '../lib/aura'
+
+Signal.trap('INT') { puts; exit 1 }
 
 unless ARGV.size == 1
   $stderr.puts "package?"
@@ -12,18 +15,19 @@ end
 env = Environment.new
 env.test  = "test"
 env.temp  = "temp"
-env.redo  =  true
-env.todo  = ARGV[0]
+env.redo  =  false
+env.todo  =  ARGV[0]
 
 if env.redo or !env.cd?
 
   FileUtils.rm_rf env.test+env.todo rescue false
 
-  package  = "https://aur.archlinux.org/#{env.todo}.git"
+  package = "https://aur.archlinux.org/#{env.todo}.git"
+  command = String.new
 
-  command  = "git clone --quiet "
-  command += package + " "
-  command += env.test + env.todo
+  command << "git clone --quiet "
+  command << package + " "
+  command << env.test + env.todo
 
   Console << [:aur, package]
 
@@ -46,6 +50,7 @@ unless pkgbuild.ok?
 end
 
 srcdir = File.expand_path(pkgbuild["pkgname"], env.temp)
+pkgdir = "/home/patz/aura/pkgs"
 
 if env.redo
   FileUtils.rm_rf(srcdir)
@@ -56,15 +61,24 @@ unless File.exists? srcdir
   Dir.mkdir(srcdir)
 
   pkgbuild["source"].each do |path|
-    Request.new(path, srcdir) rescue
+    Source.new(path, srcdir) rescue
     begin
-      $stderr.puts "sauce?"
-      exit 1
+      $stderr.puts "source?!"
     end
   end
 
 end
 
 pkgbuild << {"srcdir" => srcdir}
-build = pkgbuild["build()"]
-system(build)
+pkgbuild << {"pkgdir" => pkgdir}
+
+["prepare", "build", "package"].each do |func|
+
+  body = pkgbuild[func + "()"]
+  next if body.nil?
+
+  pipe = Pipe.new
+  pipe.command = body
+  pipe.go!
+
+end

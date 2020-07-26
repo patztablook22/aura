@@ -1,4 +1,4 @@
-class Request
+class Source
 
   @source
   @target
@@ -12,9 +12,9 @@ class Request
     @target = File.expand_path(source.split("/")[-1], target)
 
     if source.start_with? /http(s)?:\/\//
-      type = URI
+      type = :net
     else
-      type = File
+      type = :pkg
     end
 
     request type
@@ -22,15 +22,37 @@ class Request
 
   end
 
+  private
+
   def request type
 
-    Console << [:req, @target]
-
-    fileI = type.open(@source)
-    File.open(@target, 'w') do |fileO|
-      fileO << fileI.read
+    File.open(@target, 'w') do |file|
+      case type
+      when :net;
+        file << requestNet
+      when :pkg;
+        file << requestPkg
+      end
     end
 
+  end
+
+  def requestNet
+
+    url = URI(@source)
+
+    Net::HTTP.start(url.hostname) do |http|
+      head = http.request_head(url)
+      Console << [ :req, @source, head["content-length"] ]
+    end
+
+    URI.open(url).read
+
+  end
+
+  def requestPkg
+    Console << [:req, @target]
+    File.open(@source).read
   end
 
   def process
@@ -55,12 +77,14 @@ class Request
 
       Console << [:tar, @target]
 
-      command  = "tar -"
-      command += "z" if extensions.index { |it| it =~ /.z/ }
-      command += "xf "
-      command += @target
-      command += " -C "
-      command += File.dirname @target
+      command = String.new
+
+      command << "tar -"
+      command << "z" if extensions.index { |it| it =~ /.z/ }
+      command << "xf "
+      command << @target
+      command << " -C "
+      command << File.dirname(@target)
 
       pipe = Pipe.new
       pipe.command = command
