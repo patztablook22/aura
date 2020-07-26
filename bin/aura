@@ -4,32 +4,46 @@ require 'open-uri'
 require 'fileutils'
 require_relative '../lib/aura'
 
-CLEAN = false
-
 env = Environment.new
-env.test = "test/test"
-env.temp = "temp"
+env.test  = "test/test"
+env.temp  = "temp"
+env.clean =  true
 
 END {
-
-  if CLEAN
-    Dir[env.temp + "/*"].each do |file|
-      FileUtils.rm_rf(file)
-    end
-  end
-
 }
 
 pkgbuild = Pkgbuild.new(File.expand_path("PKGBUILD", env.test))
 
 unless pkgbuild.ok?
-  puts "pkgbuild?"
+  $stderr.puts "pkgbuild?"
   exit 1
 end
 
-source = pkgbuild.get("source")
+srcdir = File.expand_path(pkgbuild["pkgname"], env.temp)
+
+if env.clean
+  FileUtils.rm_rf(srcdir)
+end
+
+unless File.exists? srcdir
+
+  Dir.mkdir(srcdir)
+  Dir.chdir(env.test)
+
+  pkgbuild["source"].each do |path|
+    Request.new(path, srcdir) rescue
+    begin
+      $stderr.puts "sauce?"
+      exit 1
+    end
+  end
+
+end
+
+exit
+
+source = pkgbuild["source"]
 target = File.expand_path(File.basename(source), env.temp)
-srcdir = File.basename(source, ".*")
 
 unless File.exists? target
   puts "downloading #{source}"
@@ -41,3 +55,9 @@ unless File.exists? target
   `tar -zxvf #{target} -C #{env.temp}`
 end
 
+pkgbuild << {"srcdir" => env.temp}
+
+puts pkgbuild["srcdir"]
+exit
+build = pkgbuild.get("build()")
+system(build)

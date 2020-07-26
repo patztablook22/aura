@@ -11,23 +11,43 @@ class Pkgbuild
     !@data.nil?
   end
 
-  def get target, index = 0
+  def << hash
+    @data.merge! hash
+  end
 
-    tmp = @data[target]
-    tmp = tmp[index] if tmp.class == Array
-    tmp = tmp&.split(//)
+  def [](target, auto = true)
 
-    return nil unless tmp
+    buf = []
+    @data[target].to_a.each do |it|
+      buf += [complete(it)]
+    end
+
+    if auto
+      case buf.size
+      when 0; nil
+      when 1; buf[0]
+      else;   buf
+      end
+    else
+      buf
+    end
+
+  end
+
+  private
+
+  def complete str
+
+    tmp = str.split(//)
 
     buf = ""
     ins = nil
-
 
     tmp.each_with_index do |c, i|
       if ins
         case c
         when "}"
-          buf += get(ins).to_s
+          buf += self[ins, false].to_a[0]
           ins = nil
         when "{";
         else
@@ -43,6 +63,7 @@ class Pkgbuild
     end
 
     buf
+
   end
 
 end

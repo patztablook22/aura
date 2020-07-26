@@ -8,11 +8,8 @@ class Parser
   @comment
 
   def initialize path
-    begin
-      file = File.open(path, 'r')
-    rescue
-      return
-    end
+
+    file = File.open(path, 'r') rescue return
 
     @data = Hash.new
     @buff = [""]
@@ -124,7 +121,6 @@ class Parser
         end
       end
 
-      puts "#{key} => #{val}"
       buff[key] = val
 
     end
