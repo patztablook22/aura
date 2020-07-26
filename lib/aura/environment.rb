@@ -8,20 +8,9 @@ class Environment
   @todo
   @redo
 
-  def cd?
-    if File.directory? aurs+todo
-      Dir.chdir aurs+todo
-      true
-    else
-      false
-    end
-  end
-
   def init
     [aurs, pkgs, root].each do |path|
-      
       FileUtils.mkdir_p(path) unless File.directory? path
-
     end
   end
 

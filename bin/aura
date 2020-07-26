@@ -20,16 +20,17 @@ env.redo =  false
 env.todo =  ARGV[0]
 env.init
 
-if env.redo or !env.cd?
+if env.redo or !File.directory?(env.aurs + env.todo)
 
-  FileUtils.rm_rf env.test+env.todo rescue false
+  FileUtils.rm_rf(env.aurs + env.todo) rescue false
 
   package = "https://aur.archlinux.org/#{env.todo}.git"
+  gitfile = env.aurs + env.todo
   command = String.new
 
   command << "git clone --quiet "
-  command << package + " "
-  command << env.aurs + env.todo
+  command << package << " "
+  command << gitfile
 
   Console << [:aur, package]
 
@@ -37,13 +38,15 @@ if env.redo or !env.cd?
   pipe.command = command
   pipe.go!
 
-  unless env.cd?
+  if pipe.out.start_with? "warning"
+    FileUtils.rm_rf gitfile
     $stderr.puts "package?!"
     exit 1
   end
 
 end
 
+Dir.chdir(env.aurs + env.todo)
 pkgbuild = Pkgbuild.new
 
 unless pkgbuild.ok?
@@ -51,8 +54,7 @@ unless pkgbuild.ok?
   exit 1
 end
 
-srcdir = File.expand_path(pkgbuild["pkgname"], env.temp)
-pkgdir = "/home/patz/aura/pkgs"
+srcdir = File.expand_path(pkgbuild["pkgname"], env.pkgs)
 
 if env.redo
   FileUtils.rm_rf(srcdir)
@@ -72,7 +74,7 @@ unless File.exists? srcdir
 end
 
 pkgbuild << {"srcdir" => srcdir}
-pkgbuild << {"pkgdir" => pkgdir}
+pkgbuild << {"pkgdir" => env.root}
 
 ["prepare", "build", "package"].each do |func|
 

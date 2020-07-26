@@ -1,6 +1,8 @@
 class Pipe
 
   @command
+  @return
+  @stdout
 
   def initialize
   end
@@ -10,9 +12,19 @@ class Pipe
   end
 
   def go!
+    IO.popen(@command, :err => [:child, :out]) do |io|
+      @stdout = io.read
+      io.close
+      @return = $?.to_i
+    end
+  end
 
-    system @command
+  def ok?
+    @return == 0
+  end
 
+  def out
+    @stdout
   end
 
 end
