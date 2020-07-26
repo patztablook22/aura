@@ -62,7 +62,9 @@ class Request
       command += " -C "
       command += File.dirname @target
 
-      system command
+      pipe = Pipe.new
+      pipe.command = command
+      pipe.go!
 
     end
     

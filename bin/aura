@@ -26,7 +26,10 @@ if env.redo or !env.cd?
   command += env.test + env.todo
 
   Console << [:aur, package]
-  system command 
+
+  pipe = Pipe.new
+  pipe.command = command
+  pipe.go!
 
   unless env.cd?
     $stderr.puts "package?!"
@@ -52,7 +55,6 @@ unless File.exists? srcdir
 
   Dir.mkdir(srcdir)
 
-  p pkgbuild["source"]
   pkgbuild["source"].each do |path|
     Request.new(path, srcdir) rescue
     begin
