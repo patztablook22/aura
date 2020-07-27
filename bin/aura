@@ -1,36 +1,51 @@
 #! /usr/bin/ruby
 
+require 'optparse'
 require 'open3'
 require 'net/http'
 require 'open-uri'
 require 'fileutils'
+
+$env
 require_relative '../lib/aura'
 
 Signal.trap('INT') { puts; exit 1 }
 
-unless ARGV.size == 1
-  puts "provide package as an argument"
+$env.errs   = __dir__ + "/../test/errs.txt"
+$env.aurs   = __dir__ + "/../test/aurs"
+$env.pkgs   = __dir__ + "/../test/pkgs"
+$env.root   = __dir__ + "/../test/root"
+$env.todo   = nil
+$env.redo   = false
+$env.init   = false
+$env.init! if $env.init?
+
+=begin
+puts $env.errs
+puts $env.aurs
+puts $env.pkgs
+puts $env.root
+puts $env.todo
+puts $env.redo
+puts $env.init?
+=end
+
+unless $env.todo
+  exit if $env.init?
+  $stderr.puts "provide one package as an argument!"
   exit 1
 end
 
 Console.log("processing")
 
-env = Environment.new
-env.aurs = "test/aurs"
-env.pkgs = "test/pkgs"
-env.root = "test/root"
-env.redo =  false
-env.todo =  ARGV[0]
-env.init
+if $env.redo or !File.directory?($env.aurs + $env.todo)
 
-if env.redo or !File.directory?(env.aurs + env.todo)
+  FileUtils.rm_rf($env.aurs + $env.todo) rescue false
 
-  FileUtils.rm_rf(env.aurs + env.todo) rescue false
-
-  package = "https://aur.archlinux.org/#{env.todo}.git"
+  package = "https://aur.archlinux.org/#{$env.todo}.git"
   Console.log("requesting", package)
 
-  gitfile = env.aurs + env.todo
+  gitfile = $env.aurs + $env.todo
   command = String.new
 
   command << "git clone --quiet "
@@ -49,7 +64,7 @@ if env.redo or !File.directory?(env.aurs + env.todo)
 
 end
 
-Dir.chdir(env.aurs + env.todo)
+Dir.chdir($env.aurs + $env.todo)
 
 Console.log("requesting", "PKGBUILD")
 pkgbuild = Pkgbuild.new
@@ -61,9 +76,9 @@ end
 
 Console.log("completing", "PKGBUILD")
 
-srcdir = File.expand_path(pkgbuild["pkgname"], env.pkgs)
+srcdir = File.expand_path(pkgbuild["pkgname"], $env.pkgs)
 pkgbuild << {"srcdir" => srcdir}
-pkgbuild << {"pkgdir" => env.root}
+pkgbuild << {"pkgdir" => $env.root}
 
 unless pkgbuild.really?
   Console.err("incomplete PKGBUILD")
@@ -72,7 +87,7 @@ end
 
 Console.end
 
-if env.redo
+if $env.redo
   FileUtils.rm_rf(srcdir)
 end
 
