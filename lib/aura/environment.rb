@@ -21,12 +21,25 @@ class Environment
     return unless @conf
     parser = Parser.new @conf
     data = parser.data
+    return unless data
 
-    self.errs = data["errs"].to_a[0]
-    self.aurs = data["aurs"].to_a[0]
-    self.pkgs = data["pkgs"].to_a[0]
-    self.root = data["root"].to_a[0]
-    self.redo = data["redo"].to_a[0]
+    err = false
+
+    data.each_pair do |key, val|
+
+      assign = key + "="
+      val = val[0] if val.class == Array
+
+      begin
+        send(assign, val)
+      rescue
+        Console << "unknown constant: #{key}"
+        err = true
+      end
+
+    end
+
+    raise if err
 
   end
 
@@ -57,7 +70,7 @@ class Environment
   end
 
   def pkgs= path
-    return if @path or !path or path.empty?
+    return if @pkgs or !path or path.empty?
     @pkgs  = File.expand_path path
     @pkgs += "/" unless @pkgs[-1] == "/"
   end
@@ -97,7 +110,7 @@ class Environment
     ]
 
     return dirs.all? { |dir| File.directory? dir } \
-        && fils.all? { |fil| File.file?      fil }
+    #   && fils.all? { |fil| File.file?      fil }
 
   end
 

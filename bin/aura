@@ -12,19 +12,20 @@ require_relative '../lib/aura'
 Signal.trap('INT') { puts; exit 1 }
 
 $env.conf   = __dir__ + "/../config.txt"
-$env.conf!
+$env.conf!  rescue Console.err("unparseable config file")
+
 $env.errs   = __dir__ + "/../errors.txt"
 $env.aurs   = __dir__ + "/../test/aurs"
 $env.pkgs   = __dir__ + "/../test/pkgs"
 $env.root   = __dir__ + "/../test/root"
 $env.todo   = nil
 $env.redo   = false
+
 $env.init   = false
 $env.init! if $env.init?
 
 unless $env.tree?
   Console.err("aura tree invalid")
-  exit 1
 end
 
 =begin
@@ -68,7 +69,6 @@ if $env.redo or !File.directory?($env.aurs + $env.todo)
   if pipe.err.start_with? "warning"
     FileUtils.rm_rf gitfile
     Console.err("couldn't find AUR package")
-    exit 1
   end
 
 end
@@ -80,7 +80,6 @@ pkgbuild = Pkgbuild.new
 
 unless pkgbuild.ok?
   Console.err("unparseable PKGBUILD")
-  exit 1
 end
 
 Console.log("completing", "PKGBUILD")
@@ -91,7 +90,6 @@ pkgbuild << {"pkgdir" => $env.root}
 
 unless pkgbuild.really?
   Console.err("incomplete PKGBUILD")
-  exit 1
 end
 
 Console.end
@@ -115,7 +113,6 @@ sources.each do |src|
   src.retrieve rescue
   begin
     Console.err("failed to open stream")
-    exit 1
   end
 end
 
@@ -141,7 +138,6 @@ Console.end
   unless pipe.ok?
     Console << pipe.err
     Console.err("compatibility?")
-    exit 1 
   end
 
 end

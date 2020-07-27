@@ -56,15 +56,19 @@ module Console
     $stderr.puts args
     $stderr.puts
 
-    return if @@heap.none?
+    unless @@heap.none?
 
-    $stderr.puts hr(true)
+      $stderr.puts hr(true)
 
-    @@heap.each do |report|
-      $stderr.puts report
+      @@heap.each do |report|
+        $stderr.puts report
+      end
+
+      $stderr.puts hr(true)
+
     end
 
-    $stderr.puts hr(true)
+    exit 1
 
   end
 

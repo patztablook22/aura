@@ -7,7 +7,7 @@ OptionParser.new do |opt|
     exit
   end
  
-  opt.on("-r", "--redo", "force install from zero") do
+  opt.on("-r", "--redo", "rebuild the package") do
     $env.redo = true
   end
 
@@ -31,7 +31,7 @@ OptionParser.new do |opt|
     $env.root = path
   end
 
-  opt.on("--init", "(re)initialize aura's tree") do 
+  opt.on("--init", "initialize aura's tree") do 
     $env.init = true
   end
 
