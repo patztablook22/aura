@@ -1,7 +1,8 @@
 class Environment
 
-  attr_reader :errs, :aurs, :pkgs, :root, :redo
+  attr_reader :conf, :errs, :aurs, :pkgs, :root, :redo
 
+  @conf
   @errs
   @aurs
   @pkgs
@@ -10,9 +11,28 @@ class Environment
   @redo
   @init
 
+  def conf= path
+    return if @conf or !path or path.empty?
+    @conf = File.expand_path path
+  end
+
+  def conf!
+
+    return unless @conf
+    parser = Parser.new @conf
+    data = parser.data
+
+    self.errs = data["errs"].to_a[0]
+    self.aurs = data["aurs"].to_a[0]
+    self.pkgs = data["pkgs"].to_a[0]
+    self.root = data["root"].to_a[0]
+    self.redo = data["redo"].to_a[0]
+
+  end
+
   def errs= path
-    return if @errs
-    @errs  = File.expand_path path
+    return if @errs or !path or path.empty?
+    @errs = File.expand_path path
   end
 
   def init= bool
@@ -31,19 +51,19 @@ class Environment
   end
 
   def aurs= path
-    return if @aurs
+    return if @aurs or !path or path.empty?
     @aurs  = File.expand_path path
     @aurs += "/" unless @aurs[-1] == "/"
   end
 
   def pkgs= path
-    return if @path
+    return if @path or !path or path.empty?
     @pkgs  = File.expand_path path
     @pkgs += "/" unless @pkgs[-1] == "/"
   end
 
   def root= path
-    return if @root
+    return if @root or !path or path.empty?
     @root  = File.expand_path path
     @root += "/" unless @root[-1] == "/"
   end
@@ -61,6 +81,24 @@ class Environment
   def redo= bool
     return if @redo
     @redo = bool if @redo.nil?
+  end
+
+  def tree?
+
+    dirs = [
+      @aurs,
+      @pkgs,
+      @root,
+    ]
+
+    fils = [
+      @conf,
+      @errs,
+    ]
+
+    return dirs.all? { |dir| File.directory? dir } \
+        && fils.all? { |fil| File.file?      fil }
+
   end
 
 end

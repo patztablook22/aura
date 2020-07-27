@@ -11,7 +11,9 @@ require_relative '../lib/aura'
 
 Signal.trap('INT') { puts; exit 1 }
 
-$env.errs   = __dir__ + "/../test/errs.txt"
+$env.conf   = __dir__ + "/../config.txt"
+$env.conf!
+$env.errs   = __dir__ + "/../errors.txt"
 $env.aurs   = __dir__ + "/../test/aurs"
 $env.pkgs   = __dir__ + "/../test/pkgs"
 $env.root   = __dir__ + "/../test/root"
@@ -20,7 +22,13 @@ $env.redo   = false
 $env.init   = false
 $env.init! if $env.init?
 
+unless $env.tree?
+  Console.err("aura tree invalid")
+  exit 1
+end
+
 =begin
+puts $env.conf
 puts $env.errs
 puts $env.aurs
 puts $env.pkgs
@@ -28,6 +36,7 @@ puts $env.root
 puts $env.todo
 puts $env.redo
 puts $env.init?
+exit
 =end
 
 unless $env.todo
