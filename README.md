@@ -38,7 +38,7 @@ curl -s https://raw.githubusercontent.com/patztablook22/aura/master/install.sh |
 # Config
 Default config location: `GIT_BASE/config.txt` \
 For the installer, that is `~/.config/aura/config.txt` \
-The config file is being parsed using the internal PKGBUILD parser \
+The config file is being parsed using the same internal PKGBUILD parser \
 hence the syntax; example:
 
 ```PKGBUILD
@@ -48,7 +48,7 @@ root = /my/root
 redo = false
 
 # not yet implemented
-errs = /my/config
+errs = /my/aura/error/file.txt
 ```
 
 # Development notes
