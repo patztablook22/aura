@@ -31,7 +31,7 @@ curl -s https://raw.githubusercontent.com/patztablook22/aura/master/install.sh |
 # request a package from the AUR if necessary and try to build it
 ./aura package
 
-# request a package from the AUR and (re)build it
+# request a package from the AUR and try to (re)build it
 ./aura package --redo
 ```
 
