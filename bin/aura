@@ -103,7 +103,7 @@ if File.exists? srcdir
 else
   Dir.mkdir(srcdir)
   sources = pkgbuild["source"]
-  sources = [sources] unless sources.class == Array
+  sources = sources.to_a
   sources.map! do |path|
     Source.new(path, srcdir)
   end
@@ -126,10 +126,10 @@ Console.end
 
 ["prepare", "build", "package"].each do |func|
 
+  Console.log("installing", func)
+
   body = pkgbuild[func + "()"]
   next if body.nil?
-
-  Console.log("installing", func)
 
   pipe = Pipe.new
   pipe.command = body
