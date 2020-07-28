@@ -6,18 +6,20 @@ require 'net/http'
 require 'open-uri'
 require 'fileutils'
 
+$base = __dir__ + "/../.."
+
 $env
 require_relative '../lib/aura'
 
 Signal.trap('INT') { puts; exit 1 }
 
-$env.conf   = __dir__ + "/../config.txt"
+$env.conf   = "#$base/config.txt"
 $env.conf!  rescue Console.err("unparseable config file")
 
-$env.errs   = __dir__ + "/../errors.txt"
-$env.aurs   = __dir__ + "/../test/aurs"
-$env.pkgs   = __dir__ + "/../test/pkgs"
-$env.root   = __dir__ + "/../test/root"
+$env.errs   = "#$base/errors.txt"
+$env.aurs   = "#$base/test/aurs"
+$env.pkgs   = "#$base/test/pkgs"
+$env.root   = "#$base/test/root"
 $env.todo   = nil
 $env.redo   = false
 
