@@ -10,11 +10,15 @@ class Pipe
   end
 
   def command= str
-    @command = str if @command.nil?
+    return if @command
+    @command = String.new
+    @command << "set -e\n"
+    @command << str
   end
 
   def go!
     @stdout, @stderr, @return = Open3.capture3 @command
+    @return = @return.exitstatus
   end
 
   def ok?

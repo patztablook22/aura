@@ -94,6 +94,20 @@ end
 
 Console.end
 
+depends = pkgbuild["depends"].to_a
+depends.map! do |pkg|
+  Depend.new(pkg)
+end
+
+Depend.init
+depends.each do |dep|
+  unless dep.present?
+    Console.err("package not found")
+  end
+end
+
+Console.end
+
 if $env.redo
   FileUtils.rm_rf(srcdir)
 end
@@ -142,7 +156,4 @@ Console.end
 
 end
 
-Console.end
-Console.log("successful")
-Console.end(:oki)
-
+Console.oki

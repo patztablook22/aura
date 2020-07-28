@@ -114,6 +114,12 @@ class Environment
 
   end
 
+  def toor!
+    Dir["#@root*"].each do |file|
+      FileUtils.rm_rf file
+    end
+  end
+
 end
 
 $env = Environment.new
