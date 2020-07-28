@@ -37,14 +37,33 @@ class Depend
     @@tries.each do |try|
       command << try << " "
     end
-    command << "-iname \"*"
-    command << @package << "*\""
+    command << "-iname "
 
-    pipe = Pipe.new
-    pipe.command = command
-    pipe.go!
+    dissolve do |it|
 
-    !pipe.out.empty?
+      cmd  = command + '"*' + it + '*" '
+      pipe = Pipe.new
+      pipe.command = cmd
+      pipe.go!
+
+      return true unless pipe.out.empty?
+
+    end
+
+    false
+
+  end
+
+  private
+
+  def dissolve
+
+    yield @package
+
+    parts = @package.split("-")
+    return if parts.size < 1
+
+    parts.each { |part| yield part }
 
   end
 
