@@ -2,25 +2,29 @@ class Source
 
   @source
   @target
+  @type
 
   @fileI
   @fileO
 
   def initialize(source, target)
-    @source = source
-    @target = File.expand_path(source.split("/")[-1], target)
+
+     source = source.split("::")
+    @source = source[-1]
+    @target = File.expand_path(@source.split("/")[-1], target)
+
+    if @source.start_with? /http(s)?:\/\//
+      @type = :net
+    else
+      @type = :aur
+    end
+
   end
 
   def retrieve
-
-    if @source.start_with? /http(s)?:\/\//
-      type = :net
-    else
-      type = :aur
-    end
-
+ 
     File.open(@target, 'w') do |file|
-      case type
+      case @type
       when :net;
         file << retrieveNet
       when :aur;

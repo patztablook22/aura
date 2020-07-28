@@ -92,7 +92,7 @@ class Pkgbuild
             ins << c
           end
         else
-          if [" ", "/", "\\", "\"", "'"].include? c
+          if [" ", ".", ",", "-", "/", "\\", "\"", "'"].include? c
             tmp = self[ins, false].to_a[0]
             raise ins unless tmp
             buf << tmp << c
