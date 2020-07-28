@@ -11,6 +11,10 @@ OptionParser.new do |opt|
     $env.redo = true
   end
 
+  opt.on("-s", "--skip [PKG]", "skip given dependency check") do |pkg|
+    $env.skip! pkg
+  end
+
   opt.on("-c", "--conf [FILE]", "config file") do |path|
     $env.conf = path
   end

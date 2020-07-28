@@ -9,7 +9,20 @@ class Environment
   @root
   @todo
   @redo
+  @skip
   @init
+
+
+  def skip! pkg
+
+    return if pkg.nil?
+    @skip = @skip.to_a + pkg.split(",")
+
+  end
+
+  def skip? pkg
+    @skip.to_a.include? pkg
+  end
 
   def conf= path
     return if @conf or !path or path.empty?

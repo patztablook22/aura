@@ -30,6 +30,8 @@ class Depend
 
     Console.log("dependency", @package)
 
+    return true if $env.skip? @package
+
     command = String.new
     command << "find "
     @@tries.each do |try|
