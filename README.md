@@ -33,6 +33,9 @@ curl -s https://raw.githubusercontent.com/patztablook22/aura/master/install.sh |
 
 # request a package from the AUR and try to (re)build it
 ./aura package --redo
+
+# e.g. install kewl
+./aura kewl
 ```
 
 # Config
