@@ -116,7 +116,7 @@ if File.exists? srcdir
   sources = []
 else
   Dir.mkdir(srcdir)
-  sources = pkgbuild["source"]
+  sources = pkgbuild["source", false]
   sources = sources.to_a
   sources.map! do |path|
     Source.new(path, srcdir)
