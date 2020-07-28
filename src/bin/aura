@@ -17,9 +17,9 @@ $env.conf   = "#$base/config.txt"
 $env.conf!  rescue Console.err("unparseable config file")
 
 $env.errs   = "#$base/errors.txt"
-$env.aurs   = "#$base/test/aurs"
-$env.pkgs   = "#$base/test/pkgs"
-$env.root   = "#$base/test/root"
+$env.aurs   = "#$base/auras/aurs"
+$env.pkgs   = "#$base/auras/pkgs"
+$env.root   = "#$base/auras/root"
 $env.todo   = nil
 $env.redo   = false
 
