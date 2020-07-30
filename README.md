@@ -1,6 +1,6 @@
 # About
 
-        **"Just installing AUR packages. _Anywhere._"**
+**"Just installing AUR packages. _Anywhere._"**
 
 ![demo](https://raw.githubusercontent.com/patztablook22/meta/master/aura/demo.gif)
 
