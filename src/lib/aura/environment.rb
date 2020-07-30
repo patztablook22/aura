@@ -2,6 +2,7 @@ class Environment
 
   attr_reader :conf, :errs, :aurs, :pkgs, :root, :redo
 
+  @verb
   @conf
   @errs
   @aurs
@@ -13,6 +14,14 @@ class Environment
   @keep
   @init
 
+  def verb= bool
+    return unless @verb.nil?
+    @verb = bool
+  end
+
+  def verb?
+    @verb == true
+  end
 
   def skip! pkg
 

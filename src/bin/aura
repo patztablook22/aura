@@ -23,6 +23,7 @@ $env.root   = "#$base/auras/root"
 $env.todo   = nil
 $env.redo   = false
 $env.keep   = false
+$env.verb   = false
 
 $env.init   = false
 $env.init! if $env.init?

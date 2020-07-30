@@ -6,6 +6,10 @@ OptionParser.new do |opt|
     puts opt
     exit
   end
+
+  opt.on("-v", "--verbose", "verbose mode") do
+    $env.verb = true
+  end
  
   opt.on("-r", "--redo", "rebuild the package") do
     $env.redo = true

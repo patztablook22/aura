@@ -129,6 +129,8 @@ module Console
     @@size = buf.length
     print buf
 
+    puts if $env.verb?
+
   end
 
   def self.erase
