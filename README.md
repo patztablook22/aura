@@ -4,7 +4,9 @@
 
 ![demo](https://raw.githubusercontent.com/patztablook22/meta/master/aura/demo.gif)
 
-This tool aims to provide a simple yet powerfull functionality of . It will assit you when installing packages from the AUR. It does cloning for you, can parse PKGBUILD, and even try to execute it in given environment, yielding feedback on what to target manually.
+This tool aims to provide a simple yet powerfull functionality. \
+It will assit you when installing packages from the `AUR`. \
+It does cloning for you, can parse PKGBUILD, and even try to execute it in given environment, yielding feedback on what to target manually.
 
 # Installation
 ```
