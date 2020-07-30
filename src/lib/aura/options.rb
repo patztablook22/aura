@@ -15,6 +15,10 @@ OptionParser.new do |opt|
     $env.skip! pkg
   end
 
+  opt.on("-k", "--keep", "don't dump the tmp root") do
+    $env.keep = true
+  end
+
   opt.on("-c", "--conf [FILE]", "config file") do |path|
     $env.conf = path
   end
@@ -31,7 +35,7 @@ OptionParser.new do |opt|
     $env.pkgs = path
   end
 
-  opt.on("--root [DIR]", "target root directory") do |path|
+  opt.on("--root [DIR]", "tmp root directory") do |path|
     $env.root = path
   end
 

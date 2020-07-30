@@ -10,6 +10,7 @@ class Environment
   @todo
   @redo
   @skip
+  @keep
   @init
 
 
@@ -127,11 +128,34 @@ class Environment
 
   end
 
-  def toor!
+  def keep= bool
+    return unless @keep.nil?
+    @keep = bool
+  end
+
+  def dump! copy = false
+
+    return if @keep
+
+    if copy
+
+      pipe = Pipe.new
+      pipe.command = "sudo cp -r #@root. /"
+      pipe.go!
+
+      unless pipe.ok?
+        exit 1
+      end
+
+    end
+
     Dir["#@root*"].each do |file|
       FileUtils.rm_rf file
     end
+
   end
+
+
 
 end
 

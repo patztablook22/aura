@@ -22,6 +22,7 @@ $env.pkgs   = "#$base/auras/pkgs"
 $env.root   = "#$base/auras/root"
 $env.todo   = nil
 $env.redo   = false
+$env.keep   = false
 
 $env.init   = false
 $env.init! if $env.init?
