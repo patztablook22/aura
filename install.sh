@@ -9,8 +9,14 @@ MANAGER=(                       \
   "dnf install -Y"              \
 )
 
-if [ $(id -u) = 0 ]; then
-  echo "run this as a normal user"
+log()
+{
+  echo "[$1] $2 "
+}
+
+sudo true
+if [ $? != 0 ]; then
+  log FAIL "root permissions needed"
   exit 1
 fi
 
@@ -35,11 +41,6 @@ if [ "$todo" = "" ]; then
   echo
   exit 1
 fi
-
-log()
-{
-  echo "[$1] $2 "
-}
 
 fail()
 {

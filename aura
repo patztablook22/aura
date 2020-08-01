@@ -1,9 +1,15 @@
-#! /usr/bin/bash
+#! /usr/bin/ruby
 
-if [ ! -f $HOME/.config/aura/src/bin/aura ]; then
-  echo "install your own aura"
+bin = ENV["HOME"] + "/.config/aura/src/bin/aura"
+
+if Dir[bin].none?
+  puts "install your own aura"
   exit 1
-fi
+end
 
-args=${@:1}
-$HOME/.config/aura/src/bin/aura $args
+args = ""
+ARGV.each do |arg|
+  args << " " << arg
+end
+
+exec(bin + args)

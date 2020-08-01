@@ -12,7 +12,6 @@ class Environment
   @redo
   @skip
   @keep
-  @init
 
   def verb= bool
     return unless @verb.nil?
@@ -69,15 +68,6 @@ class Environment
   def errs= path
     return if @errs or !path or path.empty?
     @errs = File.expand_path path
-  end
-
-  def init= bool
-    return if @init
-    @init = bool
-  end
-
-  def init?
-    @init
   end
 
   def init!

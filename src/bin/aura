@@ -24,9 +24,7 @@ $env.todo   = nil
 $env.redo   = false
 $env.keep   = false
 $env.verb   = false
-
-$env.init   = true
-$env.init! if $env.init?
+$env.init!
 
 unless $env.tree?
   Console.err("aura tree invalid")
@@ -45,7 +43,6 @@ exit
 =end
 
 unless $env.todo
-  exit if $env.init?
   $stderr.puts "provide one package as an argument!"
   exit 1
 end
