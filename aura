@@ -1,1 +1,9 @@
-src/bin/aura
+#! /usr/bin/bash
+
+if [ ! -f $HOME/.config/aura/src/bin/aura ]; then
+  echo "install your own aura"
+  exit 1
+fi
+
+args=${@:1}
+$HOME/.config/aura/src/bin/aura $args

@@ -1,86 +1,77 @@
 #! /usr/bin/bash
 
-DIR="$HOME/.config"
-CWD=$(pwd)
-OKI=true
+BASEDIR="$HOME/.config"
+DEPENDS="git ruby"
+MANAGER=(                       \
+  "apt-get install -y"          \
+  "pacman -S --noconfirm"       \
+  "xbps-install -y"             \
+  "dnf install -Y"              \
+)
 
 if [ $(id -u) = 0 ]; then
   echo "run this as a normal user"
   exit 1
 fi
 
-phase()
+for it in ${!MANAGER[@]}; do
+
+  cmd=${MANAGER[$it]}
+  tmp=$(echo $cmd | cut -d" " -f1)
+  type $tmp > /dev/null 2>&1
+
+  if [ $? = 0 ]; then
+    todo=$cmd
+  fi
+
+done 
+
+if [ "$todo" = "" ]; then
+  echo
+  echo "this installer doesn't support your distribution"
+  echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+  echo "follow the instructions at"
+  echo "https://github.com/patztablook22/aura#manually"
+  echo
+  exit 1
+fi
+
+endl=0
+log()
 {
-  printf "\n"
-  printf "  $1\n"
-  printf "  " 
-
-  for (( i = 0; i < ${#1}; i++ )); do
-    printf "~"
-  done
-
-  printf "\n\n"
+  if [ $endl = 0 ]; then
+    endl=1
+  else
+    printf "\n"
+  fi
+  printf "[$1] $2 "
 }
 
-hr()
+fail()
 {
-  for (( i = 0; i < 55; i++ )); do
-    printf "#"
-  done
-
-  printf "\n"
+  log FAIL installation failed
+  echo
 }
 
-phase DEPENDENCIES
-sudo xbps-install -Syu git ruby
+trap fail EXIT
+set -e
 
-phase CLONING
-mkdir -p $DIR
-cd $DIR
+log DEPS "$DEPENDS"
+sudo $todo $DEPENDS > /dev/null
+
+mkdir -p $BASEDIR  > /dev/null 2>&1
+cd $BASEDIR
 
 if [ -e aura ]; then
-  echo "AURA seems to be here already... reinstalling"
+  log AURA reinstalling
   rm -rf aura
-fi
-
-git clone https://github.com/patztablook22/aura/
-
-phase SUCCESS
-echo "linking executable into current working directory"
-cd $CWD
-
-target=$DIR/aura/aura
-ln -sf $target .
-
-if [ " $target" = "$(ls -l aura | cut -d'>' -f2)" ]; then
-  echo "done"
-  echo
 else
-  echo "linking FAILED but myeh do it manually or whatever"
-  echo
-  OKI=false
+  log AURA installing
 fi
 
-echo "AURA dir FYI: $DIR/aura/"
-echo " ... all files are being stored in there by deafult"
-echo " ... to change that, use either CLI options or"
-echo " ... $DIR/aura/config.txt"
-echo
+git clone -q https://github.com/patztablook22/aura/
+sudo install aura/aura /usr/bin/
 
-if [ $OKI != true ]; then
-  exit
-fi
-
-hr
+log DONE successful
+trap - EXIT
 echo
-echo "USAGE"
-echo 
-echo "    ./aura --help"
-echo
-echo "INITIALIZE (when eventually configured)"
-echo
-echo "    ./aura --init"
-echo
-hr
-echo
-
