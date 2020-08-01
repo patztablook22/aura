@@ -36,21 +36,14 @@ if [ "$todo" = "" ]; then
   exit 1
 fi
 
-endl=0
 log()
 {
-  if [ $endl = 0 ]; then
-    endl=1
-  else
-    printf "\n"
-  fi
-  printf "[$1] $2 "
+  echo "[$1] $2 "
 }
 
 fail()
 {
   log FAIL installation failed
-  echo
 }
 
 trap fail EXIT
@@ -74,4 +67,3 @@ sudo install aura/aura /usr/bin/
 
 log DONE successful
 trap - EXIT
-echo
