@@ -25,7 +25,7 @@ $env.redo   = false
 $env.keep   = false
 $env.verb   = false
 
-$env.init   = false
+$env.init   = true
 $env.init! if $env.init?
 
 unless $env.tree?

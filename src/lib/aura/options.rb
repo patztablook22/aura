@@ -43,9 +43,11 @@ OptionParser.new do |opt|
     $env.root = path
   end
 
+=begin
   opt.on("--init", "initialize aura's tree") do 
     $env.init = true
   end
+=end
 
   begin
     opt.parse!
