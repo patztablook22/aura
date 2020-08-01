@@ -1,6 +1,6 @@
 OptionParser.new do |opt|
 
-  opt.banner = "#$0 [options] package"
+  opt.banner = "aura [options] package"
 
   opt.on("-h", "--help", "print this help") do
     puts opt
@@ -15,7 +15,7 @@ OptionParser.new do |opt|
     $env.redo = true
   end
 
-  opt.on("-s", "--skip [PKG]", "skip given dependency check") do |pkg|
+  opt.on("-s", "--skip [DEP]", "skip given dependency check") do |pkg|
     $env.skip! pkg
   end
 
