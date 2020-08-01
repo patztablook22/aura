@@ -12,13 +12,14 @@ class Depend
 
     Console.log("dependency")
 
-    @@tries.filter! do |try|
-      if File.symlink? try and @@tries.include? File.readlink(try)
-        false
-      else
-        true
-      end
+    tmp = []
+
+    @@tries.each do |try|
+      return if File.symlink? try and @@tries.include? File.readlink(try)
+      tmp << try
     end
+
+    @@tries = tmp
 
   end
   
