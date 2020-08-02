@@ -1,4 +1,8 @@
-# Just installing AUR packages. _Anywhere._
+![AURA](https://raw.githubusercontent.com/patztablook22/meta/master/aura/logo.png)
+
+
+
+## AUR packages - _Anywhere._
 
 **CROSS-PLATFORM** [Arch User Repository](https://aur.archlinux.org) Assistant written in Ruby.
 
@@ -8,7 +12,7 @@ This tool aims to provide simple yet powerfull functionality. \
 It will assit you when installing packages from the AUR. \
 It does cloning for you, can parse PKGBUILD, and even try to execute it in given environment, yielding feedback on what to target manually.
 
-# Installation
+## Installation
 ```
 curl -s https://raw.githubusercontent.com/patztablook22/aura/master/install.sh | bash
 ```
@@ -16,14 +20,16 @@ curl -s https://raw.githubusercontent.com/patztablook22/aura/master/install.sh |
 ## Manually
 
 **Dependencies**
+  - git
   - ruby
   
 **Steps**
   1. dependencies
-  2. clone this repository
-  3. execute `GIT_BASE/aura`
+  2. clone the repository into `~/.config/`
+  3. execute `BASEDIR/aura`
+  4. you can link it into `/usr/bin/`
 
-# Usage
+## Usage
 ```bash
 # for help
 ./aura --help
@@ -41,7 +47,7 @@ curl -s https://raw.githubusercontent.com/patztablook22/aura/master/install.sh |
 ./aura kewl
 ```
 
-# Config
+## Config
 Default config location: `GIT_BASE/config.txt` \
 For the installer, that is `~/.config/aura/config.txt` \
 The config file is being parsed using the same internal PKGBUILD parser \
