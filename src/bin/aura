@@ -63,9 +63,7 @@ if $env.redo or !File.directory?($env.aurs + $env.todo)
   command << package << " "
   command << gitfile
 
-  pipe = Pipe.new
-  pipe.command = command
-  pipe.go!
+  pipe = Pipe.go! command
 
   if pipe.err.start_with? "warning"
     FileUtils.rm_rf gitfile
@@ -139,16 +137,14 @@ end
 
 Console.end
 
+Dir.chdir srcdir
+
 ["prepare", "build", "package"].each do |func|
 
   Console.log("installing", func)
 
   body = pkgbuild[func + "()"]
-  next if body.nil?
-
-  pipe = Pipe.new
-  pipe.command = body
-  pipe.go!
+  pipe = Pipe.go! body
 
   unless pipe.ok?
     Console << pipe.err

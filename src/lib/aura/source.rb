@@ -52,23 +52,35 @@ class Source
 
     end while valid
 
+    current = Dir.pwd
+    archive = File.basename(@target)
+    Dir.chdir File.dirname(@target)
+
     if extensions.include? "tar"
 
-      Console.log("Extracting", @target)
+      Console.log("extracting", @target)
       command = String.new
 
       command << "tar -"
       command << "z" if extensions.index { |it| it =~ /.z/ }
       command << "xf "
-      command << @target
-      command << " -C "
-      command << File.dirname(@target)
+      command << archive
 
-      pipe = Pipe.new
-      pipe.command = command
-      pipe.go!
+      Pipe.go! command
+
+    elsif extensions.include? "deb"
+
+      Console.log("extracting", @target)
+      command = String.new
+
+      command << "ar -x "
+      command << @target
+
+      Pipe.go! command
 
     end
+
+    Dir.chdir current
     
   end
 

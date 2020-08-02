@@ -6,14 +6,20 @@ class Pipe
   @stdout
   @stderr
 
+  def self.go! command
+    pipe = Pipe.new
+    pipe.command = command
+    pipe.go!
+    pipe
+  end
+
   def initialize
+    @command = "set -e\n"
   end
 
   def command= str
-    return if @command
-    @command = String.new
-    @command << "set -e\n"
-    @command << str
+    @command << str rescue return
+    @command.freeze
   end
 
   def go!
