@@ -54,7 +54,7 @@ fi
 # executed on fail
 fail()
 {
-  log FAIL installation failed
+  log FAIL "installation failed"
 }
 
 trap fail EXIT
