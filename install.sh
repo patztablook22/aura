@@ -71,7 +71,7 @@ buf=$(echo $todo | awk "{print $buf}")
 log DEPS "$buf"
 
 # install dependencies
-sudo $todo > /dev/null
+sudo $todo > /dev/null 2>&1
 
 # clone aura into $BASEDIR/aura
 mkdir -p $BASEDIR  > /dev/null 2>&1
