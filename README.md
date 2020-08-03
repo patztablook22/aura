@@ -61,6 +61,12 @@ aura package --skip dep,another
 # verbose mode
 aura package --verbose
 
+# use custom config file
+aura package --conf myaura.conf
+
+# use custom fakeroot directory
+aura package --root my/fake/root
+
 ```
 
 ## Config
