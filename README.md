@@ -32,19 +32,19 @@ curl -s https://raw.githubusercontent.com/patztablook22/aura/master/install.sh |
 ## Usage
 ```bash
 # for help
-./aura --help
-
-# to init environment based on config / CLI options
-./aura --init 
+aura --help
 
 # request a package from the AUR if necessary and try to build it
-./aura package
+aura package
 
 # request a package from the AUR and try to (re)build it
-./aura package --redo
+aura package --redo
+
+# keep the package in the fakeroot dir for testing / review
+aura package --keep
 
 # e.g. install kewl
-./aura kewl
+aura kewl
 ```
 
 ## Config
