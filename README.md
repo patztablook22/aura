@@ -2,7 +2,7 @@
 
 
 
-## AUR packages - _Anywhere._
+## “AUR packages - _Anywhere._”
 
 **CROSS-PLATFORM** [Arch User Repository](https://aur.archlinux.org) Assistant written in Ruby.
 
