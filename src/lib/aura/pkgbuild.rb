@@ -84,7 +84,7 @@ class Pkgbuild
           case c
           when "}"
             tmp  = self[ins, false].to_a[0]
-            raise ins unless tmp
+            tmp = "${" + ins + "}" unless tmp
             buf << tmp
             ins = nil
           when "{";
@@ -94,7 +94,7 @@ class Pkgbuild
         else
           if [" ", ".", ",", "-", "/", "\\", "\"", "'"].include? c
             tmp = self[ins, false].to_a[0]
-            raise ins unless tmp
+            tmp = "$" + ins unless tmp
             buf << tmp << c
             ins = nil
           else

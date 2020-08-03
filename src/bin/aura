@@ -81,15 +81,9 @@ unless pkgbuild.ok?
   Console.err("unparseable PKGBUILD")
 end
 
-Console.log("completing", "PKGBUILD")
-
 srcdir = File.expand_path(pkgbuild["pkgname"], $env.pkgs)
 pkgbuild << {"srcdir" => srcdir}
 pkgbuild << {"pkgdir" => $env.root}
-
-unless pkgbuild.really?
-  Console.err("incomplete PKGBUILD")
-end
 
 Console.end
 
