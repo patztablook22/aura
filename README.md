@@ -72,10 +72,11 @@ aura package --root my/fake/root
 ## Config
 Default config location: `GIT_BASE/config.txt` \
 That is, for the installer `~/.config/aura/config.txt` \
-The config file is being parsed using the same internal PKGBUILD parser \
+It's being interpreted using the same internal PKGBUILD parser \
 hence the syntax; example:
 
 ```PKGBUILD
+
 aurs = /my/aur/repositories
 pkgs = /my/packages
 root = /my/root
@@ -83,6 +84,7 @@ redo = false
 
 # not yet implemented
 errs = /my/aura/error/file.txt
+
 ```
 
 ## Manual installation
@@ -90,11 +92,14 @@ errs = /my/aura/error/file.txt
 **Dependencies**
   - git
   - ruby
+  - tar
+  - binutils
+  - xz
   
 **Steps**
   1. dependencies
   2. clone the repository into `~/.config/`
-  3. execute `BASEDIR/aura`
+  3. execute `GIT_BASE/aura`
   4. you can link it into `/usr/bin/`
 
 # Development notes
