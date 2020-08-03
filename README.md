@@ -17,21 +17,33 @@ It does cloning for you, can parse PKGBUILD, and even try to execute it in given
 curl -s https://raw.githubusercontent.com/patztablook22/aura/master/install.sh | bash
 ```
 
-## Manually
+## TL;DR Examples
+```bash
 
-**Dependencies**
-  - git
-  - ruby
-  
-**Steps**
-  1. dependencies
-  2. clone the repository into `~/.config/`
-  3. execute `BASEDIR/aura`
-  4. you can link it into `/usr/bin/`
+# install opera-beta
+# automatically checking for local files
+# and using them instead of downloading
+
+aura opera-beta
+
+# install discord after downloading a corrupt file
+# e.g. due to SIGINT
+
+aura --redo discord
+
+# install kewl and keep it in the fakeroot
+# to check the files it will create
+# also skip "glibc" dependency
+# and show what exactly is happening
+
+aura --keep --skip glibc --verbose kewl
+
+```
 
 ## Usage
 ```bash
-# for help
+
+# print help
 aura --help
 
 # request a package from the AUR if necessary and try to build it
@@ -43,8 +55,12 @@ aura package --redo
 # keep the package in the fakeroot dir for testing / review
 aura package --keep
 
-# e.g. install kewl
-aura kewl
+# skip checking dependency "dep" and "another"
+aura package --skip dep,another
+
+# verbose mode
+aura package --verbose
+
 ```
 
 ## Config
@@ -62,6 +78,18 @@ redo = false
 # not yet implemented
 errs = /my/aura/error/file.txt
 ```
+
+## Manual installation
+
+**Dependencies**
+  - git
+  - ruby
+  
+**Steps**
+  1. dependencies
+  2. clone the repository into `~/.config/`
+  3. execute `BASEDIR/aura`
+  4. you can link it into `/usr/bin/`
 
 # Development notes
 
