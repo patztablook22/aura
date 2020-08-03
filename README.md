@@ -71,7 +71,7 @@ aura package --root my/fake/root
 
 ## Config
 Default config location: `GIT_BASE/config.txt` \
-For the installer, that is `~/.config/aura/config.txt` \
+That is, for the installer `~/.config/aura/config.txt` \
 The config file is being parsed using the same internal PKGBUILD parser \
 hence the syntax; example:
 
