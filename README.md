@@ -10,7 +10,7 @@
 
 This tool aims to provide simple yet powerful functionality. \
 It will assist you when installing packages from the AUR. \
-It does cloning for you, can parse PKGBUILD, and even try to execute it a in given environment, yielding feedback on what to target manually.
+It does cloning for you, can parse PKGBUILD, and even try to execute it in a given environment, yielding feedback on what to target manually.
 
 ## Installation
 ```
