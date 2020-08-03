@@ -73,7 +73,7 @@ aura package --root my/fake/root
 Default config location: `GIT_BASE/config.txt` \
 That is, for the installer `~/.config/aura/config.txt` \
 It's being interpreted using the same internal PKGBUILD parser \
-hence the syntax; example:
+hence the syntax, for example:
 
 ```PKGBUILD
 
