@@ -43,10 +43,10 @@ done
 # no command plausible
 if [ "$todo" = "" ]; then
   echo
-  echo "this installer doesn't support your distribution"
-  echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-  echo "follow the instructions at"
-  echo "https://github.com/patztablook22/aura#manually"
+  echo "Unfortunately this installer doesn't support your distribution"
+  echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+  echo "Don't panic though! Just follow the instructions at:"
+  echo "https://github.com/patztablook22/aura#manual-installation"
   echo
   exit 1
 fi
