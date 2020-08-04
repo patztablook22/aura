@@ -87,7 +87,7 @@ pkgbuild << {"pkgdir" => $env.root}
 
 Console.end
 
-depends = pkgbuild["depends"].to_a
+depends = pkgbuild["depends", false]
 depends.map! do |pkg|
   Depend.new(pkg)
 end
