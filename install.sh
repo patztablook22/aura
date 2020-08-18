@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#! /usr/bin/env bash
 
 # where to put the aura directory
 BASEDIR="$HOME/.config"
