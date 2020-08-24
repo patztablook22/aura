@@ -5,7 +5,8 @@ class Index
 
   def initialize phrase
     @key = URI::encode_www_form_component(phrase)
-    @doc = URI::open("https://aur.archlinux.org/packages/?O=0&PP=250&K=#@key").read
+    uri = URI.parse("https://aur.archlinux.org/packages/?O=0&PP=250&K=#@key")
+    @doc = uri.open.read
   end
 
   def empty?
