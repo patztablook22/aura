@@ -112,13 +112,14 @@ class Parser
       if key.end_with? "()"
         val = [val]
       else
-        tmp = val.split(/["'\n]/)
+        tmp = val.split(/ "| '|' |" |\n/)
         val = []
         tmp.each do |it|
           it.strip!
-          unless it.empty?
-            val += [it]
-          end
+          next if it.empty?
+          it.delete! ?"
+          it.delete! ?'
+          val += [it]
         end
       end
 

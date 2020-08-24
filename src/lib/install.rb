@@ -39,7 +39,7 @@ unless pkgbuild.ok?
   Console.err("unparseable PKGBUILD")
 end
 
-srcdir = File.expand_path(pkgbuild["pkgname"], $env.pkgs)
+srcdir = File.expand_path(pkgbuild["pkgname"][0], $env.pkgs)
 pkgbuild << {"srcdir" => srcdir}
 pkgbuild << {"pkgdir" => $env.root}
 
@@ -95,8 +95,12 @@ Dir.chdir srcdir
 
   Console.log("installing", func)
 
-  body  = "patch(){\necho\n}\n"
-  body += pkgbuild[func + "()"].to_s
+  body  = "patch(){\n:\n}\n"
+  body += func + "(){\n"
+  body += pkgbuild[func + "()"][0].to_s
+  body += "\n:\n}\n" # to prevent empty function
+  body += func
+
   pipe  = Pipe.go! body
 
   unless pipe.ok?

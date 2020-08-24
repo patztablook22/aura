@@ -62,7 +62,7 @@ class Source
       command = String.new
 
       command << "tar -"
-      command << "z" if extensions.index { |it| it =~ /.z/ }
+      command << "z" if extensions.any? { |it| it =~ /.z/ and it != "xz" }
       command << "xf "
       command << archive
 

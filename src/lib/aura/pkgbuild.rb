@@ -45,11 +45,20 @@ class Pkgbuild
   def [](target, auto = true)
 
     buf = []
+
+    tmp = target.split("%")
+    target = tmp[0]
+    drop   = tmp[1]
+
     @data[target].to_a.each do |it|
       buf += [complete(it)]
     end
 
-    if auto
+    if buf.size == 1 and !drop.nil?
+      buf[0] = buf[0][0 .. -1 - drop.size]
+    end
+
+    if false
       case buf.size
       when 0; nil
       when 1; buf[0]
