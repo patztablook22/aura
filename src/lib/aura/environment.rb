@@ -14,6 +14,16 @@ class Environment
   @keep
   @dump
   @toor
+  @find
+
+  def find= bool
+    return unless @find.nil?
+    @find = bool
+  end
+
+  def find?
+    @find == true
+  end
 
   def verb= bool
     return unless @verb.nil?

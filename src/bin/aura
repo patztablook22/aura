@@ -41,4 +41,8 @@ unless $env.todo
 end
 
 # load the lifecycle
-require_relative '../lib/install'
+if $env.find?
+  require_relative '../lib/browse'
+else
+  require_relative '../lib/install'
+end
