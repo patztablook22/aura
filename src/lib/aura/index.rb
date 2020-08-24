@@ -5,7 +5,10 @@ class Index
 
   def initialize phrase
     @key = URI::encode_www_form_component(phrase)
-    uri = URI.parse("https://aur.archlinux.org/packages/?O=0&PP=250&K=#@key")
+    url  = "https://aur.archlinux.org/packages/?O=0&PP=250&K=#@key"
+    url += "&&SeB=n"
+    url += "d" if $env.verb?
+    uri  = URI.parse url
     @doc = uri.open.read
   end
 

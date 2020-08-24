@@ -13,7 +13,7 @@ class Source
     @source = source[-1]
     @target = File.expand_path(@source.split("/")[-1], target)
 
-    if @source.start_with? /http(s)?:\/\//
+    if @source =~ /\Ahttp(s)?:\/\//
       @type = :net
     else
       @type = :aur
