@@ -1,8 +1,12 @@
 #! /usr/bin/env ruby
 
 $base = __dir__ + "/../.."
-
 $env
+
+# require the bare minimum to process options
+require_relative '../lib/lite'
+
+# load some other common libraries
 require_relative '../lib/aura'
 
 Signal.trap('INT') { puts; exit 1 }
@@ -36,4 +40,5 @@ unless $env.todo
 
 end
 
+# load the lifecycle
 require_relative '../lib/install'
