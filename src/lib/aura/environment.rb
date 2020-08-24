@@ -12,6 +12,8 @@ class Environment
   @redo
   @skip
   @keep
+  @dump
+  @toor
 
   def verb= bool
     return unless @verb.nil?
@@ -132,26 +134,42 @@ class Environment
     @keep = bool
   end
 
-  def dump! copy = false
+  def keep?
+    @keep == true
+  end
 
+  def toor= bool
+    return unless @toor.nil?
+    @toor = bool
+  end
+
+  def toor?
+    @toor == true
+  end
+
+  def dump= bool
+    return unless @dump.nil?
+    @dump = bool
+  end
+
+  def dump?
+    @dump == true
+  end
+
+  def dump!
     return if @keep
-
-    if copy
-
-      pipe = Pipe.new
-      pipe.command = "sudo cp -r #@root. /"
-      pipe.go!
-
-      unless pipe.ok?
-        exit 1
-      end
-
+    pipe = Pipe.new
+    pipe.command = "sudo cp -r #@root. /"
+    pipe.go!
+    unless pipe.ok?
+      exit 1
     end
+  end
 
+  def toor!
     Dir["#@root*"].each do |file|
       FileUtils.rm_rf file
     end
-
   end
 
 

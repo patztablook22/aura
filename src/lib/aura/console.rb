@@ -51,7 +51,11 @@ module Console
   def self.err *args
 
     self.end :err
-    $env.dump!
+
+    unless $env.keep?
+      $env.dump!
+      $env.toor!
+    end
 
     $stderr.puts
     $stderr.puts args
@@ -75,7 +79,10 @@ module Console
 
   def self.oki
     self.end :oki
-    $env.dump! true
+    unless $env.keep?
+      $env.dump!
+      $env.toor!
+    end
   end
 
   def self.hr suppress = false

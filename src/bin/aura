@@ -23,12 +23,12 @@ $env.root   = "#$base/auras/root"
 $env.todo   = nil
 $env.redo   = false
 $env.keep   = false
+$env.dump   = false
+$env.toor   = false
 $env.verb   = false
 $env.init!
 
-unless $env.tree?
-  Console.err("aura tree invalid")
-end
+Console.err("aura tree invalid") unless $env.tree?
 
 =begin
 puts $env.conf
@@ -41,10 +41,18 @@ puts $env.redo
 puts $env.init?
 exit
 =end
+$env.dump! if $env.dump?
+$env.toor! if $env.toor?
+
+
 
 unless $env.todo
-  $stderr.puts "provide one package as an argument!"
+
+  exit if $env.dump? or $env.toor?
+
+  $stderr.puts "provide (one) package as an argument!"
   exit 1
+
 end
 
 Console.log("processing")
@@ -87,7 +95,7 @@ pkgbuild << {"pkgdir" => $env.root}
 
 Console.end
 
-depends = pkgbuild["depends", false]
+depends = pkgbuild["depends", false] + pkgbuild["makedepends", false]
 depends.map! do |pkg|
   Depend.new(pkg)
 end
@@ -137,8 +145,9 @@ Dir.chdir srcdir
 
   Console.log("installing", func)
 
-  body = pkgbuild[func + "()"]
-  pipe = Pipe.go! body
+  body  = "patch(){\necho\n}\n"
+  body += pkgbuild[func + "()"].to_s
+  pipe  = Pipe.go! body
 
   unless pipe.ok?
     Console << pipe.err

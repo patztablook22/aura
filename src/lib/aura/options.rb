@@ -19,8 +19,16 @@ OptionParser.new do |opt|
     $env.skip! pkg
   end
 
-  opt.on("-k", "--keep", "don't dump the tmp root") do
+  opt.on("-k", "--keep", "don't clean the tmp root after dumping") do
     $env.keep = true
+  end
+
+  opt.on("-d", "--dump", "dump previously kept tmp root") do
+    $env.dump = true
+  end
+
+  opt.on("-t", "--toor", "clean previously kept tmp root") do
+    $env.toor = true
   end
 
   opt.on("-c", "--conf [FILE]", "config file") do |path|
