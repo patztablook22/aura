@@ -69,7 +69,10 @@ OptionParser.new do |opt|
   end
 
   ARGV.each do |arg|
-    $env.todo = arg
+    tmp = arg.split
+    tmp.each do |pkg|
+      $env.todo = arg
+    end
   end
 
 end

@@ -4,7 +4,7 @@ class Index
   @doc
 
   def initialize phrase
-    @key = URI::encode_www_form_component(phrase)
+    @key = URI.encode_www_form_component(phrase)
     url  = "https://aur.archlinux.org/packages/?O=0&PP=250&K=#@key"
     url += "&&SeB=n"
     url += "d" if $env.verb?

@@ -95,7 +95,8 @@ class Source
       Console.log("retrieving", @source, head["content-length"])
     end
 
-    URI.open(url).read
+    uri = URI.parse @source
+    uri.open.read
 
   end
 
