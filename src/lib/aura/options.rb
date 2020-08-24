@@ -10,7 +10,11 @@ OptionParser.new do |opt|
   opt.on("-v", "--verbose", "verbose mode") do
     $env.verb = true
   end
- 
+
+  opt.on("-f", "--find", "find package online") do
+    $env.find = true
+  end
+
   opt.on("-r", "--redo", "rebuild the package") do
     $env.redo = true
   end
