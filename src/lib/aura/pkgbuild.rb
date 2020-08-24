@@ -115,6 +115,12 @@ class Pkgbuild
 
     end
 
+    unless ins.nil?
+      tmp = self[ins, false].to_a[0]
+      tmp = "$" + ins unless tmp
+      buf << tmp
+    end
+
     buf
 
   end
