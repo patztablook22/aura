@@ -77,14 +77,28 @@ sudo $todo > /dev/null 2>&1
 mkdir -p $BASEDIR  > /dev/null 2>&1
 cd $BASEDIR
 
+backup=0
+
 if [ -e aura ]; then
+
+  if [ -e aura/config.txt ]; then
+    log SAVE config.txt
+    backup=1
+    config=$(cat aura/config.txt)
+  fi
+
   log AURA reinstalling
   rm -rf aura
+
 else
   log AURA installing
 fi
 
 git clone -q https://github.com/patztablook22/aura/
+
+if [ $backup = 1 ]; then
+  printf "${config}\n" > aura/config.txt
+fi
 
 # /usr/bin/aura executable
 sudo install aura/aura /usr/bin/
