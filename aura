@@ -31,8 +31,8 @@ end until tmp == "/"
 # default AURA
 path << ENV["HOME"] + "/.config/aura" + main
 
-# select valid path
-bin = path.index do |i|
+# get first valid path
+bin = path.find do |i|
   File.file? i
 end
 
@@ -49,4 +49,4 @@ ARGV.each do |arg|
 end
 
 # execute appropriate AURA
-exec(path[bin] + args)
+exec(bin + args)
