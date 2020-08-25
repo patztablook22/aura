@@ -1,6 +1,6 @@
 <p align="center"><b>
   <br />
-  &gt;&gt;&gt; Check out <a href="https://patz.gitbook.io/aura/">AURA gitbook</a> &lt;&lt;&lt;
+  &gt;&gt;&gt; Check out <a target="_blank" href="https://patz.gitbook.io/aura/">AURA gitbook</a> &lt;&lt;&lt;
   <br /><br />
 </b></p>
  
