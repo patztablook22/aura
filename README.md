@@ -1,7 +1,3 @@
-![AURA](https://raw.githubusercontent.com/patztablook22/meta/master/aura/logo.png)
-
-
-
 ## “AUR packages - _Anywhere._”
 
 **CROSS-PLATFORM** [Arch User Repository](https://aur.archlinux.org) Assistant written in Ruby.
