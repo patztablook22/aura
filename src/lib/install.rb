@@ -47,10 +47,12 @@ Console.end
 
 depends = pkgbuild["depends", false] + pkgbuild["makedepends", false]
 depends.map! do |pkg|
+  next if $env.skip? pkg
   Depend.new(pkg)
 end
+depends.delete nil
 
-Depend.init
+Depend.init if depends.any?
 depends.each do |dep|
   unless dep.present?
     Console.err("package not found")

@@ -42,7 +42,7 @@ class Environment
   end
 
   def skip? pkg
-    @skip.to_a.include? pkg
+    @skip.to_a.include? pkg or @skip.to_a.include? "ALL"
   end
 
   def conf= path
@@ -118,6 +118,7 @@ class Environment
 
   def redo= bool
     return if @redo
+    bool = true? bool
     @redo = bool if @redo.nil?
   end
 
@@ -141,6 +142,7 @@ class Environment
 
   def keep= bool
     return unless @keep.nil?
+    bool = true? bool
     @keep = bool
   end
 
@@ -150,6 +152,7 @@ class Environment
 
   def toor= bool
     return unless @toor.nil?
+    bool = true? bool
     @toor = bool
   end
 
@@ -159,6 +162,7 @@ class Environment
 
   def dump= bool
     return unless @dump.nil?
+    bool = true? bool
     @dump = bool
   end
 
@@ -182,6 +186,16 @@ class Environment
     end
   end
 
+  private
+
+  def true? tmp
+    tmp.downcase! if tmp.class == String
+    case tmp
+    when true, "true", -1, 0  ;      true
+    when false, "false", 1;          false
+    else;                            nil
+    end
+  end
 
 
 end
