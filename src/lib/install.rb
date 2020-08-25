@@ -50,7 +50,7 @@ depends.map! do |pkg|
   next if $env.skip? pkg
   Depend.new(pkg)
 end
-depends.delete nil
+depends.compact!
 
 Depend.init if depends.any?
 depends.each do |dep|
