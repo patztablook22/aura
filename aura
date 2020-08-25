@@ -3,29 +3,50 @@
 # This script runs appropriate AURA instance
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
-# maybe it is already inside AURA directory?
+# maybe it's inside its own AURA directory
+# >>> user@linux ~/test/aura $ ./aura
+#
+# also might be called from inside another
+# >>> user@linux ~/test/aura/src $ aura
+#
 # otherwise try ~/.config/aura
+# >>> user@linux ~ $ aura
+# 
 # else error
 
 
-rel = "/src/bin/aura"
-bin = __dir__ + rel
+main = "/src/bin/aura"
+path = Array.new
 
-if Dir[bin].none?
+# inside it's own
+path << __dir__ + main
 
-  bin  = ENV["HOME"] + "/.config/aura" + rel
-  puts bin
+# inside another
+tmp = Dir.pwd
+begin
+  path << tmp + main
+  tmp = File.dirname tmp
+end until tmp == "/"
 
-  if Dir[bin].none?
-    puts "install your own aura"
-    exit 1
-  end
+# default AURA
+path << ENV["HOME"] + "/.config/aura" + main
 
+# select valid path
+bin = path.index do |i|
+  File.file? i
 end
 
+# none valid
+if bin.nil?
+  $stderr.puts "can't find appropriate AURA"
+  exit 1
+end
+
+# get current arguments
 args = ""
 ARGV.each do |arg|
   args << " " << arg
 end
 
-exec(bin + args)
+# execute appropriate AURA
+exec(path[bin] + args)
