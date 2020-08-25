@@ -2,7 +2,9 @@
 
 **CROSS-PLATFORM** [Arch User Repository](https://aur.archlinux.org) Assistant written in Ruby.
 
-![demo](https://raw.githubusercontent.com/patztablook22/meta/master/aura/demo.gif)
+<p align="center">
+<img src="https://raw.githubusercontent.com/patztablook22/meta/master/aura/demo.gif" />
+</p>
 
 This tool aims to provide simple yet powerful functionality. \
 It will assist you when installing packages from the AUR. \
