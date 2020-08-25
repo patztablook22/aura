@@ -1,4 +1,12 @@
+<p align="center"><b>
+  <br />
+  &gt;&gt;&gt; Check out <a href="https://patz.gitbook.io/aura/">AURA gitbook</a> &lt;&lt;&lt;
+  <br /><br />
+</b></p>
+ 
+
 ## “AUR packages - _Anywhere._”
+
 
 **CROSS-PLATFORM** [Arch User Repository](https://aur.archlinux.org) Assistant written in Ruby.
 
