@@ -1,12 +1,18 @@
-![AURA](https://raw.githubusercontent.com/patztablook22/meta/master/aura/logo.png)
-
-
+<p align="center"><b>
+  <br />
+  &gt;&gt;&gt; Check out <a href="https://patz.gitbook.io/aura/">AURA gitbook</a> &lt;&lt;&lt;
+  <br /><br />
+</b></p>
+ 
 
 ## “AUR packages - _Anywhere._”
 
+
 **CROSS-PLATFORM** [Arch User Repository](https://aur.archlinux.org) Assistant written in Ruby.
 
-![demo](https://raw.githubusercontent.com/patztablook22/meta/master/aura/demo.gif)
+<p align="center">
+<img src="https://raw.githubusercontent.com/patztablook22/meta/master/aura/demo.gif" />
+</p>
 
 This tool aims to provide simple yet powerful functionality. \
 It will assist you when installing packages from the AUR. \
