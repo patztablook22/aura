@@ -20,7 +20,7 @@ OptionParser.new do |opt|
   end
 
   opt.on("-s", "--skip [DEP]", "skip given dependency check") do |pkg|
-    $env.skip! pkg
+    $env.skip = pkg
   end
 
   opt.on("-k", "--keep", "don't clean the tmp root after dumping") do

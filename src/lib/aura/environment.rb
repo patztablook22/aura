@@ -34,11 +34,9 @@ class Environment
     @verb == true
   end
 
-  def skip! pkg
-
+  def skip= pkg
     return if pkg.nil?
     @skip = @skip.to_a + pkg.split(",")
-
   end
 
   def skip? pkg
