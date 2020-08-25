@@ -1,10 +1,26 @@
 #! /usr/bin/env ruby
 
-bin = ENV["HOME"] + "/.config/aura/src/bin/aura"
+# This script runs appropriate AURA instance
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# 
+# maybe it is already inside AURA directory?
+# otherwise try ~/.config/aura
+# else error
+
+
+rel = "/src/bin/aura"
+bin = __dir__ + rel
 
 if Dir[bin].none?
-  puts "install your own aura"
-  exit 1
+
+  bin  = ENV["HOME"] + "/.config/aura" + rel
+  puts bin
+
+  if Dir[bin].none?
+    puts "install your own aura"
+    exit 1
+  end
+
 end
 
 args = ""
